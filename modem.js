@@ -10,7 +10,7 @@ var args = proc.argv.slice(3)
   , exec = proc.argv[2]
   , streams
 
-cmd = cp.spawn(exec, args, { cwd: __dirname })
+cmd = cp.spawn(exec, args, { cwd: process.env.CWD })
 streams = [cmd.stdout, cmd.stderr]
 
 streams.forEach(function (stream) {
