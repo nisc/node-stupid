@@ -8,20 +8,24 @@ var fs = require('fs')
 
 var args = proc.argv.slice(3)
   , exec = proc.argv[2]
+  , streams
 
 cmd = cp.spawn(exec, args, { cwd: __dirname })
+streams = [cmd.stdout, cmd.stderr]
 
-cmd.stdout.on('data', function (data) {
-  cmd.stdout.pause()
-  var offset = 0
-    , end = data.length
-  ;
-  (function writeChunk () {
-    proc.stdout.write(data.slice(offset, Math.min(offset+CHUNK, end)))
-    if ((offset += CHUNK) < end) {
-      setTimeout(writeChunk, (.5 + Math.random()) * AVG_DELAY_MS)
-    } else {
-      cmd.stdout.resume()
-    }
-  }).call()
+streams.forEach(function (stream) {
+  stream.on('data', function (data) {
+    stream.pause()
+    var offset = 0
+      , end = data.length
+    ;
+    (function writeChunk () {
+      proc.stdout.write(data.slice(offset, Math.min(offset+CHUNK, end)))
+      if ((offset += CHUNK) < end) {
+        setTimeout(writeChunk, (.5 + Math.random()) * AVG_DELAY_MS)
+      } else {
+        stream.resume()
+      }
+    }).call()
+  })
 })
