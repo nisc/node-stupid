@@ -1,0 +1,16 @@
+{ "author": "nisc <spam@schmckr.de> (http://nkls.schmckr.de)"
+, "name": "stupid"
+, "description": "Dumpster for stupid node.js scripts"
+, "version": "0.0.0"
+, "homepage": "https://github.com/nisc/node-stupid"
+, "repository": {
+    "type": "git"
+  , "url": "git://github.com/nisc/node-stupid.git"
+  }
+, "engines": {
+    "node": "0.6.x"
+  }
+, "dependencies": {}
+, "devDependencies": {}
+, "optionalDependencies": {}
+}
