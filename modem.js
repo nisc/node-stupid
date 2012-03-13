@@ -11,26 +11,28 @@ var args = proc.argv.slice(3)
   , streams
   , cmd
 
-if (proc.argv.length > 2) {
+// decide whether to spawn a new child process or simply read from stdin
+if (typeof exec !== 'undefined') {
   cmd = cp.spawn(exec, args, { cwd: proc.env.CWD })
-  streams = [cmd.stdout, cmd.stderr]
+  streams = [{ in: cmd.stdout, out: proc.stdout },
+             { in: cmd.stderr, out: proc.stderr }]
 } else {
-  streams = [proc.stdin]
+  streams = [{ in: proc.stdin, out: proc.stdout }]
   proc.stdin.resume()
 }
 
-streams.forEach(function (stream) {
-  stream.on('data', function (data) {
-    stream.pause()
+streams.forEach(function (pair) {
+  pair.in.on('data', function (data) {
+    pair.in.pause()
     var offset = 0
       , end = data.length
     ;
     (function writeChunk () {
-      proc.stdout.write(data.slice(offset, Math.min(offset+CHUNK, end)))
+      pair.out.write(data.slice(offset, Math.min(offset+CHUNK, end)))
       if ((offset += CHUNK) < end) {
         setTimeout(writeChunk, (.5 + Math.random()) * AVG_DELAY_MS)
       } else {
-        stream.resume()
+        pair.in.resume()
       }
     }).call()
   })
