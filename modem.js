@@ -25,11 +25,11 @@ streams.forEach(function (pair) {
   pair.in.on('data', function (data) {
     pair.in.pause()
     var offset = 0
-      , chunksz = (.5 + Math.random()) * AVG_CHUNKSZ
-      , end = data.length
+      , end    = data.length
     ;
     (function writeChunk () {
-      pair.out.write(data.slice(offset, Math.min(offset+chunksz, end)))
+      var chunksz = Math.ceil((.5 + Math.random()) * AVG_CHUNKSZ)
+      pair.out.write(data.slice(offset, Math.min(offset + chunksz, end)))
       if ((offset += chunksz) < end) {
         setTimeout(writeChunk, (.5 + Math.random()) * AVG_DELAY_MS)
       } else {
