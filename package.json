@@ -7,6 +7,10 @@
     "type": "git"
   , "url": "git://github.com/nisc/node-stupid.git"
   }
+, "bin": {
+    "starwars": "./bin/starwars.js"
+  , "modem": "./bin/modem.js"
+  }
 , "engines": {
     "node": "0.6.x"
   }
