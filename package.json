@@ -10,7 +10,9 @@
 , "engines": {
     "node": "0.6.x"
   }
-, "dependencies": {}
+, "dependencies": {
+    "colors": "0.6.0-1"
+  }
 , "devDependencies": {}
 , "optionalDependencies": {}
 }
